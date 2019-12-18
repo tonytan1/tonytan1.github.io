@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <script src="js/leon.js"></script>
 <script src="js/TweenMax.min.js"></script>
-<html>
 <body>
+    <table>
+        <tr>
+            <td><canvas id="text_area"></canvas></td>
+            <td><canvas id="img_area"></canvas></td>
+        </tr>
 </body>
 <script>
-let leon, canvas, ctx;
+let leon, canvas, canvas1, ctx, ctx1;
 
 const sw = 800;
 const sh = 600;
 const pixelRatio = 2;
 
-function init() {
-    canvas = document.createElement('canvas');
-    document.body.appendChild(canvas);
+function showText(wording) {
+
+
+    canvas = document.getElementById("text_area");
     ctx = canvas.getContext("2d");
 
     canvas.width = sw * pixelRatio;
@@ -23,7 +28,7 @@ function init() {
     ctx.scale(pixelRatio, pixelRatio);
 
     leon = new LeonSans({
-        text: 'The quick brown\nfox jumps over\nthe lazy dog',
+        text: wording,
         color: ['#000000'],
         size: 80,
         weight: 200
@@ -44,19 +49,39 @@ function init() {
 
 function animate(t) {
     requestAnimationFrame(animate);
-
     ctx.clearRect(0, 0, sw, sh);
-
     const x = (sw - leon.rect.w) / 2;
     const y = (sh - leon.rect.h) / 2;
     leon.position(x, y);
-
     leon.draw(ctx);
 }
 
 window.onload = () => {
-    init();
+    const wording = 'The quick white\nhorse jumps over\nthe lazy dog';
+    showText(wording);
+    showImg('img/over.jpg');
 };
+
+function showImg(img_src) {
+    canvas1 = document.getElementById('img_area');
+    ctx1 = canvas1.getContext("2d"); 
+
+    // leon.text = "changed";
+    const img = new Image();
+    img.src = img_src;
+    img.onload = () =>{
+        canvas1.width = img.width;
+        canvas1.height = img.height;
+        ctx1.drawImage(img, 0, 0,img.width, img.height);
+    } 
+}
+
+window.onclick = ()=>{
+    const wording = 'Finally, \nthey fall in love ~';
+    showText(wording);
+    showImg('img/black.jpg');
+    setTimeout(function(){  showImg('img/color.jpg');;}, 3000); 
+}
 
 </script>
 </html>
